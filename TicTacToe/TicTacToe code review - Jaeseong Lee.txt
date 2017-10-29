@@ -1,0 +1,51 @@
+/*CS520 - Code review and MVC in action - Jaeseong Lee*/
+
+
+******How to run******
+1.Run `ant` in the root directory, which contains the `build.xml` build file.
+2.Run `java -cp bin Main`
+
+
+******Code Review******
+	The Controller's role in the MVC pattern is to adjust the View and the Model.
+Therefore, It must also be able to invoke methods of the model to manipulate the data
+or invoke operations.
+	The provided TicTacToe program was not separated the logic from the user
+interface, so the View part of the program or the logic running behind it cannot be
+easily modified without affecting each other. Therefore, the controller must
+be modified to manipulate the domain model in response to GUI-based events.
+This problem can be addressed by changing the structure so that the user's request
+through the interface can communicate with the model through the controller.
+	Too many redundant patterns in Model. (Too many duplicated loops for checking
+each row, col, diagonal on the board and unnecessary duplicated state messages).
+Need to create the methods involved in the logic, create the necessary objects using
+the controller, and render them to the view.
+
+******Redesign list******
+1. Controller invokes methods responding to logic from Model
+
+2. Controller renders(view data) to View.
+
+3. Model and View can't call the method and variables directly from each other
+
+4. Redisign method to determine a winner in each game
+
+(there was a bug from provided code i.g If the user presses the buttons in order
+[2][0]-'X', [2][1]-'O', [1][0]-'X', [1][1]-'O', [0][0]-'X', the game ends and
+player 1 wins to be normal, but it is ignored and the user can continue pressing the button
+and the winner can also be changed.).
+To solve this bug, I used the for loop to check rows, columns, and diagonal lines.
+
+5. Reading game moves from the command line.
+C:\Users\JasonLee\Desktop\TicTacToe\TicTacToe>java -cp bin Main
+(New Game!
+Player 1('X') Marked point(3,1). now Player 2('O')'s turn
+Player 2('O') Marked point(3,2). now Player 1('X')'s turn
+Player 1('X') Marked point(2,1). now Player 2('O')'s turn
+Player 2('O') Marked point(2,3). now Player 1('X')'s turn
+Player 1('X') Marked point(2,2). now Player 2('O')'s turn
+Player 2('O') Marked point(1,2). now Player 1('X')'s turn
+Player 1('X') Marked point(1,3). now Player 2('O')'s turn
+Player 1 wins! Click the 'Reset' button to play new game.
+New Game!)
+
